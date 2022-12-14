@@ -1,0 +1,35 @@
+.tile {
+    width: 100px;
+    height: 100px;
+    display: grid;
+    place-content: center;
+    cursor: grab;
+}
+
+.piece {
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: 80px;
+    background-position: center;
+}
+
+.piece:active {
+    cursor: grabbing;
+}
+
+.enemy-pawn {
+    background-color: #f8f8f8;
+}
+
+.ally-pawn {
+    background-color: #565352;
+}
+
+.black {
+    background: #232621;
+}
+
+.white {
+    background-color: #B93848;
+}
