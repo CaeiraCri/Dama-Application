@@ -2,73 +2,40 @@ import "./Board.css";
 import Tile from '../Tile/Tile';
 import React, { useRef, useState } from 'react';
 import Rules from '../Rules/Rules';
-import { letterAxis, numberAxis, Piece, PieceType } from '../../constants';
-
-const NUMBER = 8;   
-const initialBoardState: Piece[] = [];
-
-//              ALLY PAWNS
-
-for(let i:number = 0; i < NUMBER; i+=2) {
-    initialBoardState.push({image: './assets/ally-pawn.png', x: i, y: 2, state: 1 ,type: PieceType.ALLY, setState(value) { this.state = value }})
-}
-
-for(let i:number = 1; i < NUMBER; i+=2) {
-    initialBoardState.push({image: './assets/ally-pawn.png', x: i, y: 1,state: 1 , type: PieceType.ALLY, setState(value) { this.state = value }})
-}
-
-for(let i:number = 0; i < NUMBER; i+=2) {
-    initialBoardState.push({image: './assets/ally-pawn.png', x: i, y: 0, state: 1 , type: PieceType.ALLY, setState(value) { this.state = value }})
-}
-
-//              ENEMY PAWNS
-
-for(let i:number = 1; i < NUMBER; i+=2) {
-    initialBoardState.push({image: './assets/enemy-pawn.png', x: i, y: 7, state: 1 ,type: PieceType.ENEMY, setState(value) { this.state = value }})
-}
-
-for(let i:number = 0; i < NUMBER; i+=2) {
-    initialBoardState.push({image: './assets/enemy-pawn.png', x: i, y: 6, state: 1 ,type: PieceType.ENEMY, setState(value) { this.state = value }})
-}
-
-for(let i:number = 1; i < NUMBER; i+=2) {
-    initialBoardState.push({image: './assets/enemy-pawn.png', x: i, y: 5, state: 1 ,type: PieceType.ENEMY, setState(value) { this.state = value } })
-}
+import { VERTICAL_AXIS, HORIZONTAL_AXIS, GRID_SIZE, Piece, initialBoardState, Position, isSamePosition } from '../../constants';   
 
 export default function Board() {
     const rules = new Rules();
-    const board = [];
-    let dropTarget = null;
-    const [activePiece, setActivePiece] = useState<HTMLElement | null>(null)
-    const [gridX, setGridX] = useState(0);
-    const [gridY, setGridY] = useState(0);
-    const boardRef = useRef<HTMLDivElement>(null);
+    const gameBoard = [];
+    const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
+    const [grabPosition, setGrabPosition] = useState<Position>({ x: -1, y: -1 })
+    const gameBoardRef = useRef<HTMLDivElement>(null);
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState)
 
-    for(let i = numberAxis.length - 1; i >= 0; i--) {
-        for(let j = 0; j < letterAxis.length; j++) {
-            let image = undefined;
-            const number = j + i;
+    for(let i = HORIZONTAL_AXIS.length - 1; i >= 0; i--) {
+        for(let j = 0; j < VERTICAL_AXIS.length; j++) {
+            const SumOfAxis = j + i;
             let empty = true;
-
-            pieces.forEach(piece => {
-                if(piece.x === j && piece.y === i && piece.state !== 0) {
-                    image = piece.image;
-                    empty = false;
-                }
-            });
-            board.push( <Tile key={`${j}, ${i}`} image={image} number={number} empty={empty} /> )
+            const piece = pieces.find(piecesIterator => piecesIterator.position.x === j && piecesIterator.position.y === i);
+            let image = piece ? piece.image : undefined;
+            gameBoard.push( <Tile key={`${j}, ${i}`} image={image} number={SumOfAxis} empty={empty} /> )
         }
     }
 
-    function grabPawn(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        const board = boardRef.current;
-        const target = e.target as HTMLElement;
-        if(target.classList.contains('piece') && board) {
-            setGridX(Math.floor((e.clientX - board.offsetLeft) / 100));
-            setGridY(Math.abs(Math.ceil((e.clientY - board.offsetTop - 800)  / 100)));
-            const x = e.clientX - 50;
-            const y = e.clientY - 50;
+    function grabPawn(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        const gameBoard = gameBoardRef.current;
+        const target = event.target as HTMLElement;
+        if(target.classList.contains('piece') && gameBoard) {
+            const grabX = Math.floor((event.clientX - gameBoard.offsetLeft) / GRID_SIZE);
+            const grabY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - 800)  / GRID_SIZE));
+            
+            setGrabPosition({ 
+                x: grabX, 
+                y: grabY
+            });
+
+            const x = event.clientX - GRID_SIZE / 2;
+            const y = event.clientY - GRID_SIZE / 2;
             target.style.position = "absolute";
             target.style.left = `${x}px`;
             target.style.top = `${y}px`;
@@ -77,22 +44,20 @@ export default function Board() {
         }
     }
         
-    function dropPawn(e: React.MouseEvent) {
-        const board = boardRef.current;
-        //TODO: CONTROLLO SE CONTIENE CLASSE PIECE O TILE ED ESEGUI ISTRUZIONI
-        if(activePiece && board) { 
-            console.log(e.clientX - board.offsetLeft, e.clientY - board.offsetTop);
-            const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
-            console.log(target)
-            const x = Math.floor((e.clientX - board.offsetLeft) / 100);
-            const y = Math.abs(Math.ceil((e.clientY - board.offsetTop - 800)  / 100)); //-800 per invertire l'asse y
-            
+    function dropPawn(event: React.MouseEvent) {
+        const gameBoard = gameBoardRef.current;
+        if(activePiece && gameBoard) { 
+            const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
+            const mouseX = Math.floor((event.clientX - gameBoard.offsetLeft) / GRID_SIZE);
+            const mouseY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - 800)  / GRID_SIZE)); 
+            const mousePosition: Position = {x: mouseX, y: mouseY}
+            console.log(grabPosition)
             setPieces((value) => {
-                const newPieces = value.map(p => {
-                    if(p.x === gridX && p.y === gridY) {
-                        if(rules.moveIsValid(gridX, gridY, x, y, p.type, value, target)) {
-                            p.x = x;
-                            p.y = y;
+                const newPieces = value.map(piecesIterator => {
+                    if(isSamePosition(piecesIterator.position, grabPosition)) {
+                        if(rules.moveIsValid(grabPosition, mousePosition, piecesIterator.type, value, target)) {
+                            piecesIterator.position.x = mouseX;
+                            piecesIterator.position.y = mouseY;
                         } else {
                             activePiece.style.position = 'relative';
                             activePiece.style.removeProperty('top');
@@ -100,7 +65,7 @@ export default function Board() {
                             activePiece.style.pointerEvents = 'all';
                         }
                     } 
-                    return p;
+                    return piecesIterator;
                 });
                 return newPieces;
             });
@@ -108,15 +73,15 @@ export default function Board() {
         }
     }
     
-    function movePawn(e: React.MouseEvent) {
-        const board = boardRef.current;
-        if(activePiece && board) {
-            const minX = board.offsetLeft - 25;
-            const minY = board.offsetTop - 25;
-            const maxX = board.offsetLeft + board.clientWidth - 75;
-            const maxY = board.clientHeight + board.offsetTop - 75;
-            const x = e.clientX - 25;
-            const y = e.clientY - 25;
+    function movePawn(event: React.MouseEvent) {
+        const gameBoard = gameBoardRef.current;
+        if(activePiece && gameBoard) {
+            const minX = gameBoard.offsetLeft - 25;
+            const minY = gameBoard.offsetTop - 25;
+            const maxX = gameBoard.offsetLeft + gameBoard.clientWidth - 75;
+            const maxY = gameBoard.clientHeight + gameBoard.offsetTop - 75;
+            const x = event.clientX - 25;
+            const y = event.clientY - 25;
 
             if(x < minX) {
                 activePiece.style.left = `${minX}px`;
@@ -140,11 +105,10 @@ export default function Board() {
 
     return(
         <div 
-        onMouseUp={(e) => dropPawn(e)}
-        onMouseMove={(e) => movePawn(e)} 
-        onMouseDown={(e) => grabPawn(e)} className='board'
-        ref={boardRef}>
-            {board}
-        </div>
+        onMouseUp={(event) => dropPawn(event)}
+        onMouseMove={(event) => movePawn(event)} 
+        onMouseDown={(event) => grabPawn(event)} className='board'
+        ref={gameBoardRef}> {gameBoard} </div>
     );
+
 }
