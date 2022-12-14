@@ -1,30 +1,19 @@
+import * as INTERFACES from './Interfaces'
+
 export const VERTICAL_AXIS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 export const HORIZONTAL_AXIS = ['1', '2', '3', '4', '5', '6', '7', '8'];
 export const GRID_SIZE = 100; 
+export const BOARD_SIZE = 800; 
+export const OFFSET_ADJUST = 25; 
+export const BOARD_ADJUST = 75; 
 
-export function isSamePosition(firstPosition: Position, secondPosition: Position) {
+
+export function isSamePosition(firstPosition: INTERFACES.Position, secondPosition: INTERFACES.Position) {
     return firstPosition.x === secondPosition.x && firstPosition.y === secondPosition.y;
 }
 
-export interface Position {
-    x: number;
-    y: number;
-} 
 
-export enum PieceType {
-    ALLY = 1,
-    ENEMY = -1,
-}
-
-export interface Piece {
-    image: string;
-    position: Position;
-    state: number; // 1 pedina, 2 dama
-    type: PieceType;
-    setState(value: number):void
-}
-
-export const initialBoardState: Piece[] = [
+export const initialBoardState: INTERFACES.Piece[] = [
 
     //ALLY PAWNS 
 
@@ -35,7 +24,7 @@ export const initialBoardState: Piece[] = [
             y: 2   
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -45,7 +34,7 @@ export const initialBoardState: Piece[] = [
             y: 2
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -55,7 +44,7 @@ export const initialBoardState: Piece[] = [
             y: 2
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -65,7 +54,7 @@ export const initialBoardState: Piece[] = [
             y: 2
         },   
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -75,7 +64,7 @@ export const initialBoardState: Piece[] = [
             y: 1
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -85,7 +74,7 @@ export const initialBoardState: Piece[] = [
             y: 1
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -95,7 +84,7 @@ export const initialBoardState: Piece[] = [
             y: 1
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -105,7 +94,7 @@ export const initialBoardState: Piece[] = [
             y: 1
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -115,7 +104,7 @@ export const initialBoardState: Piece[] = [
             y: 0
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -125,7 +114,7 @@ export const initialBoardState: Piece[] = [
             y: 0
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -135,7 +124,7 @@ export const initialBoardState: Piece[] = [
             y: 0
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
     {
@@ -145,7 +134,7 @@ export const initialBoardState: Piece[] = [
             y: 0
         },
         state: 1,
-        type: PieceType.ALLY,
+        type: INTERFACES.PieceType.ALLY,
         setState(value) { this.state = value }
     },
 
@@ -158,7 +147,7 @@ export const initialBoardState: Piece[] = [
             y: 7
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -168,7 +157,7 @@ export const initialBoardState: Piece[] = [
             y: 7
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -178,7 +167,7 @@ export const initialBoardState: Piece[] = [
             y: 7
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -188,7 +177,7 @@ export const initialBoardState: Piece[] = [
             y: 7
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -198,7 +187,7 @@ export const initialBoardState: Piece[] = [
             y: 6
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -208,7 +197,7 @@ export const initialBoardState: Piece[] = [
             y: 6
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -218,7 +207,7 @@ export const initialBoardState: Piece[] = [
             y: 6 
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -228,7 +217,7 @@ export const initialBoardState: Piece[] = [
             y: 6 
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -238,7 +227,7 @@ export const initialBoardState: Piece[] = [
             y: 5 
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -248,7 +237,7 @@ export const initialBoardState: Piece[] = [
             y: 5
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -258,7 +247,7 @@ export const initialBoardState: Piece[] = [
             y: 5 
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     },
     {
@@ -268,7 +257,7 @@ export const initialBoardState: Piece[] = [
             y: 5
         },
         state: 1,
-        type: PieceType.ENEMY, 
+        type: INTERFACES.PieceType.ENEMY, 
         setState(value) { this.state = value }
     }
 

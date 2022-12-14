@@ -2,18 +2,19 @@ import "./Board.css";
 import Tile from '../Tile/Tile';
 import React, { useRef, useState } from 'react';
 import Rules from '../Rules/Rules';
-import { VERTICAL_AXIS, HORIZONTAL_AXIS, GRID_SIZE, Piece, initialBoardState, Position, isSamePosition } from '../../constants';   
+import * as CONSTANTS from '../../constants';   
+import * as INTERFACES from '../../Interfaces'
 
 export default function Board() {
     const rules = new Rules();
     const gameBoard = [];
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
-    const [grabPosition, setGrabPosition] = useState<Position>({ x: -1, y: -1 })
+    const [grabPosition, setGrabPosition] = useState<INTERFACES.Position>({ x: -1, y: -1 })
     const gameBoardRef = useRef<HTMLDivElement>(null);
-    const [pieces, setPieces] = useState<Piece[]>(initialBoardState)
+    const [pieces, setPieces] = useState<INTERFACES.Piece[]>(CONSTANTS.initialBoardState)
 
-    for(let i = HORIZONTAL_AXIS.length - 1; i >= 0; i--) {
-        for(let j = 0; j < VERTICAL_AXIS.length; j++) {
+    for(let i = CONSTANTS.HORIZONTAL_AXIS.length - 1; i >= 0; i--) {
+        for(let j = 0; j < CONSTANTS.VERTICAL_AXIS.length; j++) {
             const SumOfAxis = j + i;
             let empty = true;
             const piece = pieces.find(piecesIterator => piecesIterator.position.x === j && piecesIterator.position.y === i);
@@ -26,16 +27,16 @@ export default function Board() {
         const gameBoard = gameBoardRef.current;
         const target = event.target as HTMLElement;
         if(target.classList.contains('piece') && gameBoard) {
-            const grabX = Math.floor((event.clientX - gameBoard.offsetLeft) / GRID_SIZE);
-            const grabY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - 800)  / GRID_SIZE));
+            const grabX = Math.floor((event.clientX - gameBoard.offsetLeft) / CONSTANTS.GRID_SIZE);
+            const grabY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - CONSTANTS.BOARD_SIZE)  / CONSTANTS.GRID_SIZE));
             
             setGrabPosition({ 
                 x: grabX, 
                 y: grabY
             });
 
-            const x = event.clientX - GRID_SIZE / 2;
-            const y = event.clientY - GRID_SIZE / 2;
+            const x = event.clientX - CONSTANTS.GRID_SIZE / 2;
+            const y = event.clientY - CONSTANTS.GRID_SIZE / 2;
             target.style.position = "absolute";
             target.style.left = `${x}px`;
             target.style.top = `${y}px`;
@@ -48,13 +49,13 @@ export default function Board() {
         const gameBoard = gameBoardRef.current;
         if(activePiece && gameBoard) { 
             const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
-            const mouseX = Math.floor((event.clientX - gameBoard.offsetLeft) / GRID_SIZE);
-            const mouseY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - 800)  / GRID_SIZE)); 
-            const mousePosition: Position = {x: mouseX, y: mouseY}
+            const mouseX = Math.floor((event.clientX - gameBoard.offsetLeft) / CONSTANTS.GRID_SIZE);
+            const mouseY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - CONSTANTS.BOARD_SIZE)  / CONSTANTS.GRID_SIZE)); 
+            const mousePosition: INTERFACES.Position = {x: mouseX, y: mouseY}
             console.log(grabPosition)
             setPieces((value) => {
                 const newPieces = value.map(piecesIterator => {
-                    if(isSamePosition(piecesIterator.position, grabPosition)) {
+                    if(CONSTANTS.isSamePosition(piecesIterator.position, grabPosition)) {
                         if(rules.moveIsValid(grabPosition, mousePosition, piecesIterator.type, value, target)) {
                             piecesIterator.position.x = mouseX;
                             piecesIterator.position.y = mouseY;
@@ -76,12 +77,12 @@ export default function Board() {
     function movePawn(event: React.MouseEvent) {
         const gameBoard = gameBoardRef.current;
         if(activePiece && gameBoard) {
-            const minX = gameBoard.offsetLeft - 25;
-            const minY = gameBoard.offsetTop - 25;
-            const maxX = gameBoard.offsetLeft + gameBoard.clientWidth - 75;
-            const maxY = gameBoard.clientHeight + gameBoard.offsetTop - 75;
-            const x = event.clientX - 25;
-            const y = event.clientY - 25;
+            const minX = gameBoard.offsetLeft - CONSTANTS.OFFSET_ADJUST;
+            const minY = gameBoard.offsetTop - CONSTANTS.OFFSET_ADJUST;
+            const maxX = gameBoard.offsetLeft + gameBoard.clientWidth - CONSTANTS.BOARD_ADJUST;
+            const maxY = gameBoard.clientHeight + gameBoard.offsetTop - CONSTANTS.BOARD_ADJUST;
+            const x = event.clientX - CONSTANTS.OFFSET_ADJUST;
+            const y = event.clientY - CONSTANTS.OFFSET_ADJUST;
 
             if(x < minX) {
                 activePiece.style.left = `${minX}px`;

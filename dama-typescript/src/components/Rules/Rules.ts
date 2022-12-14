@@ -1,4 +1,4 @@
-import { PieceType, Piece, Position } from "../../constants";
+import { PieceType, Piece, Position } from "../../Interfaces";
 
 export default class Rules {
     moveIsValid(previousPosition: Position, mousePosition: Position, type:PieceType, boardState: Piece[], target: HTMLElement):Boolean {
