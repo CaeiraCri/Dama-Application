@@ -5,18 +5,25 @@ export default class Rules {
         
         //  MOVE CHECKER
         if(mousePosition.y === previousPosition.y + type && target.classList.contains('black')) {
-            if(target.dataset.empty === 'true') {
+            if(this.isEmpty(mousePosition, boardState)) {
                 return true;
             }
         }
 
         //  ATTACK CHECKER
         if(mousePosition.y === previousPosition.y + type * 2 && target.classList.contains('black')) {
-            if(target.dataset.empty === 'true' && this.checkEatenPawn(previousPosition, mousePosition.x, type, boardState)) {
+            if(this.isEmpty(mousePosition, boardState) && this.checkEatenPawn(previousPosition, mousePosition.x, type, boardState)) {
                 return true;
             }
         }
         return false;
+    }
+
+    isEmpty(mousePosition: Position, boardState: Piece[]) {
+        const piece: Piece | undefined = boardState.find(piecesIterator => piecesIterator.position.y === mousePosition.y && piecesIterator.position.x === mousePosition.x);
+
+        if(piece) { return false}
+        return true;
     }
 
     checkEatenPawn(previousPosition: Position, mouseX: number, type: number, boardState: Piece[]) {

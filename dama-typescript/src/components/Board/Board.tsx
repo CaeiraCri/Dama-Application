@@ -6,6 +6,7 @@ import * as CONSTANTS from '../../constants';
 import * as INTERFACES from '../../Interfaces'
 
 let turn = true;
+let GAME_ENDED = false;
 
 export default function Board() {
     const rules = new Rules();
@@ -18,25 +19,29 @@ export default function Board() {
     for(let i = CONSTANTS.HORIZONTAL_AXIS.length - 1; i >= 0; i--) {
         for(let j = 0; j < CONSTANTS.VERTICAL_AXIS.length; j++) {
             const SumOfAxis = j + i;
-            let empty = true;
-            const piece = pieces.find(piecesIterator => piecesIterator.position.x === j && piecesIterator.position.y === i);
-            let image = piece ? piece.image : undefined;
-            gameBoard.push( <Tile key={`${j}, ${i}`} image={image} number={SumOfAxis} empty={empty} /> )
+            if(SumOfAxis % 2 == 0) {
+                const piece = pieces.find(piecesIterator => piecesIterator && piecesIterator.position.x === j && piecesIterator.position.y === i);
+                let image = piece ? piece.image : undefined;
+                gameBoard.push( <Tile key={`${j}, ${i}`} image={image} number={SumOfAxis} /> )
+            } else {
+                gameBoard.push( <Tile key={`${j}, ${i}`} number={SumOfAxis} /> )
+            }
+            
         }
     }
         
     const turno = document.querySelector('.turn');
 
     if(turn && turno) {
-        turno.innerHTML = 'WHITE';
+        turno.innerHTML = 'RED';
     } else if(!turn && turno) {
-        turno.innerHTML = 'BLACK';
+        turno.innerHTML = 'BLUE';
     }
 
     function grabPawn(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         const gameBoard = gameBoardRef.current;
         const target = event.target as HTMLElement;
-        if(target.classList.contains('piece') && gameBoard) {
+        if(target.classList.contains('piece') && gameBoard && !GAME_ENDED) {
             const grabX = Math.floor((event.clientX - gameBoard.offsetLeft) / CONSTANTS.GRID_SIZE);
             const grabY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - CONSTANTS.BOARD_SIZE)  / CONSTANTS.GRID_SIZE));
 
@@ -53,7 +58,6 @@ export default function Board() {
             if(!turn && piece?.type == INTERFACES.PieceType.ENEMY) {
                 movePawn= target;
             }
-            console.log(movePawn)
             if(movePawn) {
                setGrabPosition({ 
                     x: grabX, 
@@ -84,6 +88,23 @@ export default function Board() {
                             piecesIterator.position.x = mouseX;
                             piecesIterator.position.y = mouseY;
                             turn = !turn;
+                            if(value.length <= 13) {
+                                const totalAllyPieces: INTERFACES.Piece[] = [];
+                                const totalEnemyPieces: INTERFACES.Piece[] = [];
+                                value.forEach(() => {
+                                    totalAllyPieces.push(value.find(p => p.type == 1) as unknown as INTERFACES.Piece);
+                                    totalEnemyPieces.push(value.find(p => p.type == -1) as unknown as INTERFACES.Piece);
+                                });
+
+                                if(turno && totalAllyPieces.length == 0) {
+                                    turno.innerHTML = 'BLUE WON';
+                                    GAME_ENDED = true;
+                                }
+                                if(turno && totalEnemyPieces.length == 0) {
+                                    turno.innerHTML = 'RED WON';
+                                    GAME_ENDED = true;
+                                }
+                            }
                         } else {
                             activePiece.style.position = 'relative';
                             activePiece.style.removeProperty('top');
