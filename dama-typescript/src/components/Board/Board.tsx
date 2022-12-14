@@ -1,9 +1,11 @@
 import "./Board.css";
 import Tile from '../Tile/Tile';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Rules from '../Rules/Rules';
 import * as CONSTANTS from '../../constants';   
 import * as INTERFACES from '../../Interfaces'
+
+let turn = true;
 
 export default function Board() {
     const rules = new Rules();
@@ -29,19 +31,34 @@ export default function Board() {
         if(target.classList.contains('piece') && gameBoard) {
             const grabX = Math.floor((event.clientX - gameBoard.offsetLeft) / CONSTANTS.GRID_SIZE);
             const grabY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - CONSTANTS.BOARD_SIZE)  / CONSTANTS.GRID_SIZE));
-            
-            setGrabPosition({ 
-                x: grabX, 
-                y: grabY
-            });
 
+            const piece = pieces.find(piecesIterator => piecesIterator.position.x === grabX && piecesIterator.position.y === grabY);
+            
             const x = event.clientX - CONSTANTS.GRID_SIZE / 2;
             const y = event.clientY - CONSTANTS.GRID_SIZE / 2;
-            target.style.position = "absolute";
-            target.style.left = `${x}px`;
-            target.style.top = `${y}px`;
-            target.style.pointerEvents = 'none';
-            setActivePiece(target);
+            let movePawn: HTMLElement | null = null;
+        
+            if(turn && piece?.type == INTERFACES.PieceType.ALLY) {
+                movePawn= target;
+            }
+
+            if(!turn && piece?.type == INTERFACES.PieceType.ENEMY) {
+                movePawn= target;
+            }
+            console.log(movePawn)
+            if(movePawn) {
+               setGrabPosition({ 
+                    x: grabX, 
+                    y: grabY
+                });
+
+                movePawn.style.position = "absolute";
+                movePawn.style.left = `${x}px`;
+                movePawn.style.top = `${y}px`;
+                movePawn.style.pointerEvents = 'none';
+                setActivePiece(movePawn); 
+            }
+            
         }
     }
         
@@ -52,13 +69,13 @@ export default function Board() {
             const mouseX = Math.floor((event.clientX - gameBoard.offsetLeft) / CONSTANTS.GRID_SIZE);
             const mouseY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - CONSTANTS.BOARD_SIZE)  / CONSTANTS.GRID_SIZE)); 
             const mousePosition: INTERFACES.Position = {x: mouseX, y: mouseY}
-            console.log(grabPosition)
             setPieces((value) => {
                 const newPieces = value.map(piecesIterator => {
                     if(CONSTANTS.isSamePosition(piecesIterator.position, grabPosition)) {
                         if(rules.moveIsValid(grabPosition, mousePosition, piecesIterator.type, value, target)) {
                             piecesIterator.position.x = mouseX;
                             piecesIterator.position.y = mouseY;
+                            turn = !turn;
                         } else {
                             activePiece.style.position = 'relative';
                             activePiece.style.removeProperty('top');
