@@ -1,6 +1,6 @@
 import "./Board.css";
 import Tile from '../Tile/Tile';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Rules from '../Rules/Rules';
 import * as CONSTANTS from '../../constants';   
 import * as INTERFACES from '../../Interfaces'
@@ -23,6 +23,14 @@ export default function Board() {
             let image = piece ? piece.image : undefined;
             gameBoard.push( <Tile key={`${j}, ${i}`} image={image} number={SumOfAxis} empty={empty} /> )
         }
+    }
+        
+    const turno = document.querySelector('.turn');
+
+    if(turn && turno) {
+        turno.innerHTML = 'WHITE';
+    } else if(!turn && turno) {
+        turno.innerHTML = 'BLACK';
     }
 
     function grabPawn(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {

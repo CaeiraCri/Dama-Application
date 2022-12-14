@@ -1,0 +1,12 @@
+.navbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+} 
+
+.turn {
+    font-size: 1.875rem;
+    color: white;
+}

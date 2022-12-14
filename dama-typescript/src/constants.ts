@@ -7,7 +7,6 @@ export const BOARD_SIZE = 800;
 export const OFFSET_ADJUST = 25; 
 export const BOARD_ADJUST = 75; 
 
-
 export function isSamePosition(firstPosition: INTERFACES.Position, secondPosition: INTERFACES.Position) {
     return firstPosition.x === secondPosition.x && firstPosition.y === secondPosition.y;
 }
