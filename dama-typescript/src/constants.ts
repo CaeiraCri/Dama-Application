@@ -6,6 +6,11 @@ export const GRID_SIZE = 100;
 export const BOARD_SIZE = 800; 
 export const OFFSET_ADJUST = 25; 
 export const BOARD_ADJUST = 75; 
+export const DAMA_STATE = 2;
+export const ENEMY_DAMA_DIRECTORY = 'assets/enemy-dama.png';
+export const ALLY_DAMA_DIRECTORY = 'assets/ally-dama.png';
+export const ENEMY_PROMOTION_ROW = 0;
+export const ALLY_PROMOTION_ROW = 7;
 
 export function isSamePosition(firstPosition: INTERFACES.Position, secondPosition: INTERFACES.Position) {
     return firstPosition.x === secondPosition.x && firstPosition.y === secondPosition.y;
@@ -24,7 +29,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -34,7 +40,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -44,7 +51,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -54,7 +62,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },   
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -64,7 +73,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -74,7 +84,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -84,7 +95,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -94,7 +106,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -104,7 +117,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -114,7 +128,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -124,7 +139,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/ally-pawn.png',
@@ -134,7 +150,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ALLY,
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
 
     //ENEMY PAWNS
@@ -147,7 +164,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -157,7 +175,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -167,7 +186,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -177,7 +197,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -187,7 +208,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -197,7 +219,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -207,7 +230,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -217,7 +241,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -227,7 +252,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -237,7 +263,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -247,7 +274,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     },
     {
         image: './assets/enemy-pawn.png', 
@@ -257,7 +285,8 @@ export const initialBoardState: INTERFACES.Piece[] = [
         },
         state: 1,
         type: INTERFACES.PieceType.ENEMY, 
-        setState(value) { this.state = value }
+        setState(value) { this.state = value },
+        setImage(value) { this.image = value }
     }
 
 ];

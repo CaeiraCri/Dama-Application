@@ -21,6 +21,13 @@ export default function Board() {
             const SumOfAxis = j + i;
             if(SumOfAxis % 2 == 0) {
                 const piece = pieces.find(piecesIterator => piecesIterator && piecesIterator.position.x === j && piecesIterator.position.y === i);
+                if(piece?.position.y === CONSTANTS.ENEMY_PROMOTION_ROW && piece.type == INTERFACES.PieceType.ENEMY && piece.state != CONSTANTS.DAMA_STATE) {
+                    piece.setState(CONSTANTS.DAMA_STATE);
+                    piece.setImage(CONSTANTS.ENEMY_DAMA_DIRECTORY);
+                } else if(piece?.position.y === CONSTANTS.ALLY_PROMOTION_ROW && piece.type == INTERFACES.PieceType.ALLY && piece.state != CONSTANTS.DAMA_STATE) {
+                    piece.setState(CONSTANTS.DAMA_STATE);
+                    piece.setImage(CONSTANTS.ALLY_DAMA_DIRECTORY);
+                }
                 let image = piece ? piece.image : undefined;
                 gameBoard.push( <Tile key={`${j}, ${i}`} image={image} number={SumOfAxis} /> )
             } else {
@@ -31,12 +38,14 @@ export default function Board() {
     }
         
     const turno = document.querySelector('.turn');
-
-    if(turn && turno) {
-        turno.innerHTML = 'RED';
-    } else if(!turn && turno) {
-        turno.innerHTML = 'BLUE';
+    if(!GAME_ENDED) {
+        if(turn && turno) {
+            turno.innerHTML = 'RED';
+        } else if(!turn && turno) {
+            turno.innerHTML = 'BLUE';
+        } 
     }
+
 
     function grabPawn(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         const gameBoard = gameBoardRef.current;
@@ -78,15 +87,18 @@ export default function Board() {
         const gameBoard = gameBoardRef.current;
         if(activePiece && gameBoard) { 
             const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
+
             const mouseX = Math.floor((event.clientX - gameBoard.offsetLeft) / CONSTANTS.GRID_SIZE);
             const mouseY = Math.abs(Math.ceil((event.clientY - gameBoard.offsetTop - CONSTANTS.BOARD_SIZE)  / CONSTANTS.GRID_SIZE)); 
-            const mousePosition: INTERFACES.Position = {x: mouseX, y: mouseY}
+            const mousePosition: INTERFACES.Position = {x: mouseX, y: mouseY};
+
             setPieces((value) => {
                 const newPieces = value.map(piecesIterator => {
                     if(CONSTANTS.isSamePosition(piecesIterator.position, grabPosition)) {
-                        if(rules.moveIsValid(grabPosition, mousePosition, piecesIterator.type, value, target)) {
+                        if(rules.moveIsValid(grabPosition, mousePosition, piecesIterator.type, piecesIterator, value, target)) {
                             piecesIterator.position.x = mouseX;
                             piecesIterator.position.y = mouseY;
+                            
                             turn = !turn;
                             if(value.length <= 13) {
                                 const totalAllyPieces: INTERFACES.Piece[] = [];

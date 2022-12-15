@@ -13,5 +13,6 @@ export interface Piece {
     position: Position;
     state: number; // 1 pedina, 2 dama
     type: PieceType;
-    setState(value: number):void
+    setState(value: number): void;
+    setImage(value: string): void;
 }
